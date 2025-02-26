@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SWAG_Quiz</string>
+    <string name="background_image_description">Background Image</string>
+    <string name="logo_image_description">logo image</string>
+</resources>
