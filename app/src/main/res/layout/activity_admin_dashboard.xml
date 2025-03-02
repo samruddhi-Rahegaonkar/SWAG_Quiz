@@ -19,8 +19,8 @@
             android:layout_height="wrap_content"
             android:background="@android:color/holo_blue_dark"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            android:elevation="4dp"
-            android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:elevation="4dp">
 
             <TextView
                 android:id="@+id/appTitle"
@@ -32,16 +32,15 @@
                 android:textStyle="bold"
                 android:padding="16dp" />
 
-            <ImageView
-                android:id="@+id/menuIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+            <Button
+                android:id="@+id/logoutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/error_red"
                 android:layout_gravity="end"
-                android:padding="16dp"
-                android:src="@drawable/baseline_menu_24"
-                android:contentDescription="Menu"
-                android:clickable="true"
-                android:focusable="true" />
+                android:padding="16dp" />
         </androidx.appcompat.widget.Toolbar>
 
         <!-- Welcome Text -->
@@ -55,45 +54,110 @@
             android:textColor="@android:color/black"
             android:padding="24dp" />
 
-        <!-- Admin Options -->
-        <LinearLayout
-            android:orientation="vertical"
+        <!-- Dashboard Cards -->
+        <GridLayout
+            android:id="@+id/gridLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="24dp">
+            android:padding="24dp"
+            android:columnCount="2"
+            android:rowCount="2"
+            android:layout_gravity="center">
 
-            <Button
-                android:id="@+id/pastQuizzes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Past Quizzes"
-                android:textSize="18sp"
-                android:backgroundTint="@android:color/holo_blue_light"
-                android:textColor="@android:color/white"
-                android:paddingVertical="16dp"
-                android:layout_marginBottom="16dp" />
+            <!-- Past Quizzes Card -->
+            <LinearLayout
+                android:id="@+id/cardPastQuizzes"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_margin="8dp"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:background="@android:color/holo_blue_light"
+                android:elevation="4dp"
+                android:padding="16dp"
+                android:clickable="true"
+                android:focusable="true">
 
-            <Button
-                android:id="@+id/createQuiz"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Create Quiz"
-                android:textSize="18sp"
-                android:backgroundTint="@android:color/holo_green_dark"
-                android:textColor="@android:color/white"
-                android:paddingVertical="16dp"
-                android:layout_marginBottom="16dp" />
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@android:drawable/ic_menu_agenda"
+                    android:layout_gravity="center" />
 
-            <Button
-                android:id="@+id/trackProgress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Track Progress"
-                android:textSize="18sp"
-                android:backgroundTint="@android:color/holo_orange_dark"
-                android:textColor="@android:color/white"
-                android:paddingVertical="16dp"/>
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Past Quizzes"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="center"
+                    android:paddingTop="16dp" />
+            </LinearLayout>
+
+            <!-- Create Quiz Card -->
+            <LinearLayout
+                android:id="@+id/cardCreateQuiz"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_margin="8dp"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:background="@android:color/holo_green_dark"
+                android:elevation="4dp"
+                android:padding="16dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@android:drawable/ic_input_add"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Create Quiz"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="center"
+                    android:paddingTop="16dp" />
+            </LinearLayout>
+
+            <!-- Track Progress Card -->
+            <LinearLayout
+                android:id="@+id/cardTrackProgress"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_margin="8dp"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:background="@android:color/holo_orange_dark"
+                android:elevation="4dp"
+                android:padding="16dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@android:drawable/ic_menu_info_details"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Track Progress"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="center"
+                    android:paddingTop="16dp" />
+            </LinearLayout>
+
+        </GridLayout>
     </LinearLayout>
 
     <!-- Navigation Drawer -->
@@ -121,7 +185,7 @@
                 android:layout_marginBottom="16dp" />
 
             <Button
-                android:id="@+id/logoutButton"
+                android:id="@+id/logoutButtonDrawer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Logout"

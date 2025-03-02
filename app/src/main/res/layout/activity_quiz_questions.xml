@@ -15,14 +15,14 @@
         android:background="@android:color/holo_blue_dark"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:elevation="4dp"
-        app:title="Track Progress"
+        app:title="Quiz Questions"
         app:titleTextColor="@android:color/white"
         android:padding="16dp"
         tools:ignore="MissingConstraints" />
 
     <!-- ListView for displaying questions -->
     <ListView
-        android:id="@+id/progressListView"
+        android:id="@+id/questionsListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"

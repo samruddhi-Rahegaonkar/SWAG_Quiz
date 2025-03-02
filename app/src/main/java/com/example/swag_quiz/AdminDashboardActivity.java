@@ -1,20 +1,27 @@
 package com.example.swag_quiz;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class AdminDashboardActivity extends AppCompatActivity {
 
     private TextView welcomeText;
-    private Button pastQuizzes, createQuiz, trackProgress, logoutButton;
-    private ImageView userLogo;
+    private LinearLayout cardPastQuizzes, cardCreateQuiz, cardTrackProgress;
+    private Button logoutButton, logoutButtonDrawer;
     private FirebaseAuth mAuth;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+    private String quizId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,32 +33,40 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         // Initialize views
         welcomeText = findViewById(R.id.welcomeText);
-        pastQuizzes = findViewById(R.id.pastQuizzes);
-        createQuiz = findViewById(R.id.createQuiz);
-        trackProgress = findViewById(R.id.trackProgress);
+        cardPastQuizzes = findViewById(R.id.cardPastQuizzes);
+        cardCreateQuiz = findViewById(R.id.cardCreateQuiz);
+        cardTrackProgress = findViewById(R.id.cardTrackProgress);
         logoutButton = findViewById(R.id.logoutButton);
+        logoutButtonDrawer = findViewById(R.id.logoutButtonDrawer);
+        toolbar = findViewById(R.id.toolbar);
+        navigationView = findViewById(R.id.nav_view);
 
-        // Fetch Admin's name (from Firebase or Intent)
+        setSupportActionBar(toolbar);
+
+        // Fetch Admin's name (from Firebase)
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             String adminName = user.getDisplayName();
             if (adminName == null || adminName.isEmpty()) {
-                adminName = "Admin"; // Fallback name
+                adminName = "Admin";
             }
             welcomeText.setText("Welcome " + adminName + " - Admin");
         } else {
             welcomeText.setText("Welcome Admin");
         }
 
-        // Click listeners for navigation
-        pastQuizzes.setOnClickListener(v -> openPastQuizzes());
-        createQuiz.setOnClickListener(v -> openCreateQuiz());
-        trackProgress.setOnClickListener(v -> openTrackProgress());
+        // Navigation actions
+        cardPastQuizzes.setOnClickListener(v -> openPastQuizzes());
+        cardCreateQuiz.setOnClickListener(v -> openCreateQuiz());
+        cardTrackProgress.setOnClickListener(v -> openTrackProgress());
         logoutButton.setOnClickListener(v -> logout());
+        logoutButtonDrawer.setOnClickListener(v -> logout());
     }
 
     private void openPastQuizzes() {
-        startActivity(new Intent(this, PastQuizzesActivity.class));
+        Intent intent=new Intent(this, PastQuizzesActivity.class);
+        intent.putExtra("quizId", quizId);
+        startActivity(intent);
     }
 
     private void openCreateQuiz() {
@@ -59,7 +74,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void openTrackProgress() {
-        startActivity(new Intent(this, TrackProgressActivity.class));
+        Intent intent = new Intent(AdminDashboardActivity.this, TrackProgressActivity.class);
+        intent.putExtra("quizId", quizId);
+        startActivity(intent);
     }
 
     private void logout() {

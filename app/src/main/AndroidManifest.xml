@@ -13,6 +13,12 @@
         android:theme="@style/Theme.SWAG_Quiz"
         tools:targetApi="31">
         <activity
+            android:name=".StudentQuizActivity"
+            android:exported="false" />
+        <activity
+            android:name=".QuizQuestionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".StudentDashboardActivity"
             android:exported="true" />
         <activity
