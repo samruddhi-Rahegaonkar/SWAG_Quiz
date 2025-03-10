@@ -15,14 +15,36 @@
         android:background="#6200EE"
         android:title="Student Dashboard"
         android:titleTextColor="@android:color/white"
-        android:elevation="4dp" />
+        android:elevation="4dp" >
+
+        <TextView
+            android:id="@+id/appTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SWAG - GDG Quiz App"
+            android:textSize="22sp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:padding="0dp" />
+
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="90dp"
+            android:layout_height="60dp"
+            android:text="Logout"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/error_red"
+            android:padding="16dp"
+            android:layout_gravity="end"/>
+
+    </androidx.appcompat.widget.Toolbar>
 
     <!-- Welcome text -->
     <TextView
         android:id="@+id/welcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome, [Student Name]"
+        android:text="Welcome,"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginTop="20dp"
@@ -33,7 +55,7 @@
         android:id="@+id/availableQuizzesLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Available Quizzes"
+        android:text="Quizzes"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="20dp"
@@ -42,28 +64,7 @@
     <ListView
         android:id="@+id/availableQuizzesListView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"
-        android:background="@android:color/white"
-        android:layout_marginTop="8dp"
-        android:elevation="2dp" />
-
-    <!-- Past Quiz History Section -->
-    <TextView
-        android:id="@+id/pastQuizzesLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Past Quizzes"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:textColor="#000000" />
-
-    <ListView
-        android:id="@+id/pastQuizzesListView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="match_parent"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp"
         android:background="@android:color/white"

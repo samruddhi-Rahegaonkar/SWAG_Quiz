@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,11 +19,13 @@ import java.util.ArrayList;
 public class StudentDashboardActivity extends AppCompatActivity {
 
     private TextView welcomeTextView;
-    private ListView quizListView, historyListView;
-    private ArrayAdapter<String> quizAdapter, historyAdapter;
+    private ListView quizListView;
+    private ArrayAdapter<String> quizAdapter;
     private ArrayList<String> quizTitles, historyTitles;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
+
+    Button logout;
     private String studentEmail;
 
     @Override
@@ -34,29 +37,39 @@ public class StudentDashboardActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         studentEmail = auth.getCurrentUser() != null ? auth.getCurrentUser().getEmail() : "Guest";
 
-        welcomeTextView = findViewById(R.id.welcomeTextView);
-        quizListView = findViewById(R.id.quizListView);
-        historyListView = findViewById(R.id.historyListView);
+        welcomeTextView = findViewById(R.id.welcomeText);
+        quizListView = findViewById(R.id.availableQuizzesListView);
+
+        logout= findViewById(R.id.logoutButton);
 
         quizTitles = new ArrayList<>();
-        historyTitles = new ArrayList<>();
 
         quizAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, quizTitles);
-        historyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, historyTitles);
 
         quizListView.setAdapter(quizAdapter);
-        historyListView.setAdapter(historyAdapter);
 
         welcomeTextView.setText("Welcome " + studentEmail);
 
-        fetchAvailableQuizzes();
-        fetchQuizHistory();
+        fetchAvailableQuizzes();;
 
         quizListView.setOnItemClickListener((parent, view, position, id) -> {
             String quizTitle = quizTitles.get(position);
             Intent intent = new Intent(StudentDashboardActivity.this, QuizQuestionsActivity.class);
             intent.putExtra("quizTitle", quizTitle);
             startActivity(intent);
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                auth.signOut();
+                Toast.makeText(StudentDashboardActivity.this, "Logged out successfully!", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(StudentDashboardActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
         });
     }
 
@@ -74,20 +87,5 @@ public class StudentDashboardActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchQuizHistory() {
-        db.collection("quizAttempts").whereEqualTo("studentEmail", studentEmail)
-                .get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        historyTitles.clear();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            String quizTitle = document.getString("quizTitle");
-                            long score = document.getLong("score");
-                            historyTitles.add(quizTitle + " - Score: " + score);
-                        }
-                        historyAdapter.notifyDataSetChanged();
-                    } else {
-                        Toast.makeText(this, "Failed to load quiz history", Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
-}
+

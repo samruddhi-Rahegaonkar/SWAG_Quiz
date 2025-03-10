@@ -28,7 +28,7 @@
         android:layout_below="@id/logoImage"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="SWAG ANDS GDG QUIZ APP"
+        android:text="SWAG AND GDG QUIZ APP"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
