@@ -25,20 +25,6 @@
             android:padding="16dp"
             tools:ignore="MissingConstraints" />
 
-        <!-- Quiz Title -->
-        <EditText
-            android:id="@+id/quizTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Enter Quiz Title"
-            android:textSize="18sp"
-            android:padding="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginHorizontal="24dp"
-            android:backgroundTint="@android:color/darker_gray"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Question -->
         <EditText
@@ -51,21 +37,9 @@
             android:layout_marginTop="16dp"
             android:layout_marginHorizontal="24dp"
             android:backgroundTint="@android:color/darker_gray"
-            app:layout_constraintTop_toBottomOf="@id/quizTitle"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
-
-        <!-- Add Image Button -->
-        <Button
-            android:id="@+id/addImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Image"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginHorizontal="24dp"
-            app:layout_constraintTop_toBottomOf="@id/questionInput"
-            app:layout_constraintStart_toStartOf="parent" />
 
         <!-- Options A to D -->
         <EditText
@@ -76,7 +50,7 @@
             android:padding="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginHorizontal="24dp"
-            app:layout_constraintTop_toBottomOf="@id/addImageButton"
+            app:layout_constraintTop_toBottomOf="@id/questionInput"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -116,16 +90,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Correct Answer Dropdown -->
-        <Spinner
-            android:id="@+id/correctAnswerSpinner"
+        <EditText
+            android:id="@+id/editTextCorrectAnswer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:hint="Correct Answer {A/B/C/D}"
+            android:padding="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginHorizontal="24dp"
             app:layout_constraintTop_toBottomOf="@id/optionD"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
 
         <!-- Add Question Button -->
         <Button
@@ -138,7 +114,7 @@
             android:textColor="@android:color/white"
             android:layout_marginTop="16dp"
             android:layout_marginHorizontal="24dp"
-            app:layout_constraintTop_toBottomOf="@id/correctAnswerSpinner"
+            app:layout_constraintTop_toBottomOf="@id/editTextCorrectAnswer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -147,7 +123,7 @@
             android:id="@+id/submitQuizButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Submit Quiz"
+            android:text="Finish"
             android:textSize="18sp"
             android:backgroundTint="@android:color/holo_red_dark"
             android:textColor="@android:color/white"

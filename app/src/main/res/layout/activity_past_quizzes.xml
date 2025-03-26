@@ -18,7 +18,9 @@
         app:title="Past Quizzes"
         app:titleTextColor="@android:color/white"
         android:padding="16dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints">
+
+    </androidx.appcompat.widget.Toolbar>
 
     <!-- Past Quizzes Title -->
     <TextView
@@ -46,5 +48,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- FloatingActionButton for Adding Questions -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add"
+        android:contentDescription="Add Question"
+        app:backgroundTint="@android:color/holo_blue_light"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
