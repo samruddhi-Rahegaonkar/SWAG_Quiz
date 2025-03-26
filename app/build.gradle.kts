@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
 }
 
+
 android {
     namespace = "com.example.swag_quiz"
     compileSdk = 35
