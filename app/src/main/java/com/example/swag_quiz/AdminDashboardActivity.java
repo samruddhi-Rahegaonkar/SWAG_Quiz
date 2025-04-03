@@ -47,10 +47,17 @@ public class AdminDashboardActivity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             String adminName = user.getDisplayName();
+
+            // If displayName is null or empty, fallback to email
             if (adminName == null || adminName.isEmpty()) {
-                adminName = "Admin";
+                adminName = user.getEmail(); // Use email if display name is unavailable
             }
-            welcomeText.setText("Welcome " + adminName + " - Admin");
+
+            if (adminName != null) {
+                welcomeText.setText("Welcome " + adminName + " - Admin");
+            } else {
+                welcomeText.setText("Welcome Admin");
+            }
         } else {
             welcomeText.setText("Welcome Admin");
         }
@@ -64,7 +71,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void openPastQuizzes() {
-        Intent intent=new Intent(this, PastQuizzesActivity.class);
+        Intent intent = new Intent(this, PastQuizzesActivity.class);
         intent.putExtra("quizId", quizId);
         startActivity(intent);
     }

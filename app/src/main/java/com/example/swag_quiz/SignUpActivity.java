@@ -6,7 +6,11 @@ import android.view.View;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.firebase.firestore.*;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +19,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText emailEditText, passwordEditText, confirmPasswordEditText;
     private RadioButton adminRadioButton, studentRadioButton;
     private Button signUpButton;
+    private FirebaseAuth auth;
     private FirebaseFirestore db;
     private ProgressBar progressBar;
 
@@ -31,6 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.signUpButton);
         progressBar = findViewById(R.id.progressBar);
 
+        auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         signUpButton.setOnClickListener(v -> {
@@ -57,24 +63,36 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        saveUserToFirestore(email, password, role);
+        // 🔥 Create user with Firebase Authentication
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = auth.getCurrentUser();
+                        if (user != null) {
+                            saveUserToFirestore(user.getUid(), email, role);
+                        }
+                    } else {
+                        showToast("Sign up failed: " + task.getException().getMessage());
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
     }
 
-    private void saveUserToFirestore(String email, String password, String role) {
+    private void saveUserToFirestore(String userId, String email, String role) {
         Map<String, Object> user = new HashMap<>();
         user.put("email", email);
-        user.put("password", password);
-        user.put("role", role);
+        user.put("role", role);  // 🔒 Storing only metadata, not password
 
-        db.collection("users").add(user)
-                .addOnSuccessListener(documentReference -> {
+        db.collection("users").document(userId)  // 🔥 Storing user with UID as document ID
+                .set(user)
+                .addOnSuccessListener(aVoid -> {
                     showToast("Sign up successful!");
                     progressBar.setVisibility(View.GONE);
                     startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
                     finish();
                 })
                 .addOnFailureListener(e -> {
-                    showToast("Failed to sign up: " + e.getMessage());
+                    showToast("Failed to save user data: " + e.getMessage());
                     progressBar.setVisibility(View.GONE);
                 });
     }

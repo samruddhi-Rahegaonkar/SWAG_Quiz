@@ -8,6 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.animation.ObjectAnimator;
 import android.animation.AnimatorSet;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 
 public class LoginActivity extends AppCompatActivity {
@@ -16,6 +19,8 @@ public class LoginActivity extends AppCompatActivity {
     private RadioButton adminRadioButton, studentRadioButton;
     private Button loginButton;
     private TextView signUpTextView;
+    private ProgressBar progressBar;
+    private FirebaseAuth auth;
     private FirebaseFirestore db;
 
     @Override
@@ -29,12 +34,16 @@ public class LoginActivity extends AppCompatActivity {
         studentRadioButton = findViewById(R.id.studentRadioButton);
         loginButton = findViewById(R.id.loginButton);
         signUpTextView = findViewById(R.id.signUpTextView);
+        progressBar = findViewById(R.id.progressBar);
+
+        auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         loginButton.setOnClickListener(v -> {
             animateLoginButton();
             loginUser();
         });
+
         signUpTextView.setOnClickListener(v -> navigateToSignUp());
     }
 
@@ -47,31 +56,52 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        checkUserRole(email);
-    }
+        progressBar.setVisibility(View.VISIBLE);
 
-    private void checkUserRole(String email) {
-        db.collection("users")
-                .whereEqualTo("email", email)
-                .get()
+        // 🔥 Authenticate with Firebase Authentication
+        auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            String role = document.getString("role");
-                            if ("admin".equals(role) && adminRadioButton.isChecked()) {
-                                showToast("Login successful as Admin");
-                                startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
-                            } else if ("student".equals(role) && studentRadioButton.isChecked()) {
-                                showToast("Login successful as Student");
-                                startActivity(new Intent(LoginActivity.this, StudentDashboardActivity.class));
-                            } else {
-                                showToast("Invalid role selection");
-                            }
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = auth.getCurrentUser();
+                        if (user != null) {
+                            checkUserRole(user.getUid());
                         }
                     } else {
-                        showToast("User not found. Please sign up.");
+                        showToast("Login failed: " + task.getException().getMessage());
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
+    }
+
+    private void checkUserRole(String userId) {
+        db.collection("users").document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String role = documentSnapshot.getString("role");
+                        if ("admin".equals(role) && adminRadioButton.isChecked()) {
+                            showToast("Login successful as Admin");
+                            navigateToDashboard(AdminDashboardActivity.class);
+                        } else if ("student".equals(role) && studentRadioButton.isChecked()) {
+                            showToast("Login successful as Student");
+                            navigateToDashboard(StudentDashboardActivity.class);
+                        } else {
+                            showToast("Invalid role selection");
+                        }
+                    } else {
+                        showToast("User role not found.");
+                    }
+                    progressBar.setVisibility(View.GONE);
+                })
+                .addOnFailureListener(e -> {
+                    showToast("Error retrieving user role: " + e.getMessage());
+                    progressBar.setVisibility(View.GONE);
+                });
+    }
+
+    private void navigateToDashboard(Class<?> destination) {
+        Intent intent = new Intent(LoginActivity.this, destination);
+        startActivity(intent);
+        finish();
     }
 
     private void navigateToSignUp() {
